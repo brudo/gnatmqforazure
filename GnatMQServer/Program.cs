@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using uPLibrary.Networking.M2Mqtt;
 
 #if TRACE
@@ -12,22 +9,25 @@ using MqttUtility = uPLibrary.Networking.M2Mqtt.Utility;
 
 namespace GnatMQServer
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
+	class Program
+	{
+		static void Main(string[] args)
+		{
 #if TRACE
-            //MqttUtility.Trace.TraceLevel = MqttUtility.TraceLevel.Verbose | MqttUtility.TraceLevel.Frame;
-            //MqttUtility.Trace.TraceListener = (f, a) => System.Diagnostics.Trace.WriteLine(System.String.Format(f, a));
+			//MqttUtility.Trace.TraceLevel = MqttUtility.TraceLevel.Verbose | MqttUtility.TraceLevel.Frame;
+			MqttUtility.Trace.TraceLevel = (MqttUtility.TraceLevel)127;
+			MqttUtility.Trace.TraceListener = (f, a) =>
+			Console.WriteLine(System.String.Format(f, a)
+			);
 #endif
 
-            // create and start broker
-            MqttBroker broker = new MqttBroker();
-            broker.Start();
+			// create and start broker
+			MqttBroker broker = new MqttBroker();
+			broker.Start();
 
-            Console.ReadLine();
+			Console.ReadLine();
 
-            broker.Stop();
-        }
-    }
+			broker.Stop();
+		}
+	}
 }
