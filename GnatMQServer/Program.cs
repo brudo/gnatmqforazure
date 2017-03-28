@@ -20,6 +20,7 @@ namespace GnatMQServer
 			Console.WriteLine(System.String.Format(f, a)
 			);
 #endif
+			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
 			// create and start broker
 			MqttBroker broker = new MqttBroker();
@@ -28,6 +29,11 @@ namespace GnatMQServer
 			Console.ReadLine();
 
 			broker.Stop();
+		}
+
+		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
