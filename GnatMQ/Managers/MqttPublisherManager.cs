@@ -208,7 +208,15 @@ namespace uPLibrary.Networking.M2Mqtt.Managers
                 // wait on message queueud to publish
                 this.publishQueueWaitHandle.WaitOne();
 
-                // first check new subscribers to send retained messages ...
+				// first check new subscribers to send retained messages ...
+				Dictionary<string,MqttMsgPublish> retainedMessagesCopy = new Dictionary<string, MqttMsgPublish>();
+				lock (this.retainedMessages)
+				{
+					foreach(var item in this.retainedMessages)
+					{
+						retainedMessagesCopy[item.Key]=item.Value;
+					}
+				}
                 lock (this.subscribersForRetained)
                 {
                     count = this.subscribersForRetained.Count;
@@ -219,8 +227,8 @@ namespace uPLibrary.Networking.M2Mqtt.Managers
                         count--;
                         MqttSubscription subscription = this.subscribersForRetained.Dequeue();
 
-                        var query = from p in this.retainedMessages
-                                    where (new Regex(subscription.Topic)).IsMatch(p.Key)     // check for topics based also on wildcard with regex
+                        var query = from p in retainedMessagesCopy
+									where (new Regex(subscription.Topic)).IsMatch(p.Key)     // check for topics based also on wildcard with regex
                                     select p.Value;
 
                         if (query.Count() > 0)
