@@ -242,15 +242,7 @@ namespace uPLibrary.Networking.M2Mqtt.Messages
             byte[] binary = value as byte[];
             if (binary != null)
             {
-                string hexChars = "0123456789ABCDEF";
-                StringBuilder sb = new StringBuilder(binary.Length * 2);
-                for (int i = 0; i < binary.Length; ++i)
-                {
-                    sb.Append(hexChars[binary[i] >> 4]);
-                    sb.Append(hexChars[binary[i] & 0x0F]);
-                }
-
-                return sb.ToString();
+				return Encoding.UTF8.GetString(binary,0,binary.Length);
             }
 
             object[] list = value as object[];
@@ -261,7 +253,7 @@ namespace uPLibrary.Networking.M2Mqtt.Messages
                 for (int i = 0; i < list.Length; ++i)
                 {
                     if (i > 0) sb.Append(',');
-                    sb.Append(list[i]);
+	                    sb.Append(list[i]);
                 }
                 sb.Append(']');
 
