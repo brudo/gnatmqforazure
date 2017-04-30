@@ -1,5 +1,6 @@
 ﻿using System;
 using uPLibrary.Networking.M2Mqtt;
+using uPLibrary.Networking.M2Mqtt.Utility;
 
 #if TRACE
 // alias needed due to Microsoft.SPOT.Trace in .Net Micro Framework
@@ -15,8 +16,8 @@ namespace GnatMQServer
 		{
 #if TRACE
 			//MqttUtility.Trace.TraceLevel = MqttUtility.TraceLevel.Verbose | MqttUtility.TraceLevel.Frame;
-			MqttUtility.Trace.TraceLevel = (MqttUtility.TraceLevel)127;
-			MqttUtility.Trace.TraceListener = (f, a) =>
+			Trace.TraceLevel = (MqttUtility.TraceLevel)127;
+			Trace.TraceListener = (f, a) =>
 			Console.WriteLine(System.String.Format(f, a)
 			);
 #endif
@@ -33,7 +34,9 @@ namespace GnatMQServer
 
 		private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			throw new NotImplementedException();
+#if TRACE
+			Trace.WriteLine(TraceLevel.Error, "Unhandled exception occurred: " + e.ExceptionObject);
+#endif
 		}
 	}
 }
